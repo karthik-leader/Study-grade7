@@ -3,79 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Math Quest: Grade 7</title>
+  <title>MYP Grade 7 Revision Hub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="background-glow"></div>
-  <main class="game-shell">
-    <header class="game-header">
-      <h1>Math Quest</h1>
-      <p class="subtitle">A 7th Grade Adventure in Numbers</p>
+  <div class="noise-overlay" aria-hidden="true"></div>
+  <main class="app-shell">
+    <header class="hero panel">
+      <p class="eyebrow">MYP Grade 7</p>
+      <h1>Revision Quiz Suite</h1>
+      <p class="hero-copy">Covering Sciences, Mathematics, and Individuals and Societies with syllabus-wide practice, instant feedback, and topic-level diagnostics.</p>
     </header>
 
-    <section class="panel controls" aria-label="Game Controls">
-      <div class="control-group">
-        <label for="topic-select">Topic</label>
-        <select id="topic-select">
-          <option value="mixed">Mixed Practice</option>
-          <option value="integers">Integers</option>
-          <option value="fractions">Fractions</option>
-          <option value="decimals">Decimals</option>
-          <option value="equations">One-Step Equations</option>
-          <option value="percent">Percent</option>
+    <section class="panel selectors" aria-label="Subject selection">
+      <div class="subject-buttons" role="tablist" aria-label="Choose subject">
+        <button type="button" class="subject-btn is-active" data-subject="science" role="tab" aria-selected="true">Sciences</button>
+        <button type="button" class="subject-btn" data-subject="mathematics" role="tab" aria-selected="false">Mathematics</button>
+        <button type="button" class="subject-btn" data-subject="individuals" role="tab" aria-selected="false">Individuals and Societies</button>
+      </div>
+
+      <div class="controls">
+        <label for="length-select">Quiz length</label>
+        <select id="length-select">
+          <option value="15">15 questions</option>
+          <option value="25" selected>25 questions</option>
+          <option value="all">Full syllabus set</option>
         </select>
-      </div>
 
-      <div class="control-group">
-        <label for="mode-select">Mode</label>
-        <select id="mode-select">
-          <option value="practice">Practice (No Timer)</option>
-          <option value="timed">Timed (60s)</option>
-        </select>
-      </div>
-
-      <button id="new-game-btn" class="btn btn-primary" type="button">Start New Game</button>
-    </section>
-
-    <section class="panel hud" aria-label="Scoreboard">
-      <div class="stat">
-        <span class="stat-label">Score</span>
-        <strong id="score">0</strong>
-      </div>
-      <div class="stat">
-        <span class="stat-label">Streak</span>
-        <strong id="streak">0</strong>
-      </div>
-      <div class="stat">
-        <span class="stat-label">Question</span>
-        <strong><span id="current-question">0</span>/<span id="total-questions">10</span></strong>
-      </div>
-      <div class="stat">
-        <span class="stat-label">Time</span>
-        <strong id="timer">--</strong>
+        <button id="start-btn" class="btn btn-primary" type="button">Start Quiz</button>
+        <button id="restart-btn" class="btn btn-secondary" type="button" disabled>Restart</button>
       </div>
     </section>
 
-    <section class="panel question-panel" aria-live="polite">
-      <p class="topic-chip" id="topic-chip">Mixed Practice</p>
-      <h2 id="question-text">Press "Start New Game" to begin.</h2>
+    <section class="panel grid" aria-live="polite">
+      <article class="quiz-column">
+        <div class="quiz-meta">
+          <span id="subject-chip" class="chip">Sciences</span>
+          <span id="topic-chip" class="chip chip-soft">Topic: -</span>
+        </div>
+        <h2 id="question-text">Pick a subject and press Start Quiz.</h2>
+        <div id="options" class="options" aria-label="Answer choices"></div>
+        <p id="feedback" class="feedback">The quiz gives explanations after each answer.</p>
+        <button id="next-btn" class="btn btn-primary" type="button" hidden>Next Question</button>
+      </article>
 
-      <div class="answer-row">
-        <input id="answer-input" type="text" inputmode="decimal" placeholder="Type your answer" autocomplete="off" disabled>
-        <button id="submit-btn" class="btn btn-accent" type="button" disabled>Submit</button>
-      </div>
-
-      <p id="feedback" class="feedback">Ready when you are.</p>
+      <aside class="stats-column" aria-label="Quiz progress">
+        <div class="stat-box">
+          <span class="stat-label">Progress</span>
+          <strong id="progress">0 / 0</strong>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Score</span>
+          <strong id="score">0</strong>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Accuracy</span>
+          <strong id="accuracy">0%</strong>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Topics Covered</span>
+          <strong id="topics-covered">0</strong>
+        </div>
+      </aside>
     </section>
 
     <section class="panel summary" id="summary-panel" hidden>
-      <h3>Round Complete</h3>
+      <h3>Quiz Summary</h3>
       <p id="summary-text"></p>
-      <button id="play-again-btn" class="btn btn-primary" type="button">Play Again</button>
+      <ul id="weak-topics" class="weak-topics"></ul>
     </section>
   </main>
 
