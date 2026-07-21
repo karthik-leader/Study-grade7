@@ -1,0 +1,249 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --paper: #f5efe3;
+  --ink: #1d2a2f;
+  --accent: #2b7a78;
+  --accent-deep: #1f5957;
+  --warm: #c96b3b;
+  --ok: #2f855a;
+  --bad: #b93a32;
+  --card: #fffdfa;
+  --edge: #dccfb6;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 15% 20%, #fff9ec 0%, transparent 36%),
+    radial-gradient(circle at 80% 0%, #d9efe8 0%, transparent 30%),
+    linear-gradient(140deg, #efe4cd 0%, #e8e5d4 44%, #d4e3d7 100%);
+}
+
+.app {
+  width: min(960px, 94vw);
+  margin: 0 auto;
+  padding: 1.5rem 0 3rem;
+}
+
+.hero {
+  background: linear-gradient(135deg, #264653 0%, #2a9d8f 58%, #e9c46a 100%);
+  color: #fffdf7;
+  border: 1px solid #18454b;
+  border-radius: 20px;
+  padding: 1.2rem 1.2rem 1.4rem;
+  box-shadow: 0 12px 30px rgba(13, 44, 54, 0.25);
+}
+
+.kicker {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  line-height: 1.1;
+}
+
+.subtitle {
+  margin: 0.7rem 0 0;
+  max-width: 65ch;
+  font-size: 0.98rem;
+}
+
+.subject-panel {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.subject-btn {
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--card) 88%, #ffffff 12%);
+  color: var(--ink);
+  font-weight: 700;
+  padding: 0.82rem 0.75rem;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.subject-btn:hover,
+.subject-btn:focus-visible {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
+.subject-btn.is-active {
+  background: linear-gradient(180deg, #fff8e9 0%, #fcefcf 100%);
+  border-color: var(--warm);
+}
+
+.quiz-shell {
+  margin-top: 1rem;
+  border: 1px solid var(--edge);
+  background: color-mix(in srgb, var(--card) 95%, #fdf7ee 5%);
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: 0 10px 22px rgba(65, 56, 27, 0.12);
+}
+
+.quiz-meta h2 {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+}
+
+.quiz-meta p {
+  margin: 0.3rem 0 0.8rem;
+  color: #3b4b50;
+  font-weight: 600;
+}
+
+.question-card {
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  padding: 1rem;
+  background: #fffdf8;
+}
+
+.question-text {
+  margin: 0;
+  font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+  font-weight: 700;
+}
+
+.options {
+  margin-top: 0.9rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.option-btn {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #c4c1b5;
+  background: #fffefb;
+  color: #243136;
+  border-radius: 12px;
+  padding: 0.75rem 0.8rem;
+  font-size: 0.97rem;
+  cursor: pointer;
+}
+
+.option-btn:hover,
+.option-btn:focus-visible {
+  border-color: var(--accent);
+  background: #f5fbf9;
+}
+
+.option-btn:disabled {
+  cursor: not-allowed;
+}
+
+.option-btn.is-correct {
+  border-color: #5ca377;
+  background: #edf8f1;
+}
+
+.option-btn.is-incorrect {
+  border-color: #ce7d7a;
+  background: #fff1f1;
+}
+
+.feedback {
+  margin-top: 0.9rem;
+  padding: 0.85rem;
+  border-radius: 12px;
+  border: 1px dashed #baa989;
+  background: #faf4e7;
+}
+
+.feedback-status {
+  margin: 0;
+  font-weight: 800;
+}
+
+.feedback-status.ok {
+  color: var(--ok);
+}
+
+.feedback-status.bad {
+  color: var(--bad);
+}
+
+.feedback-answer,
+.feedback-explanation {
+  margin: 0.35rem 0 0;
+}
+
+.quiz-actions {
+  margin-top: 0.85rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.7rem 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 100%);
+  cursor: pointer;
+}
+
+.action-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.action-btn.secondary {
+  background: linear-gradient(180deg, #457b9d 0%, #2a5677 100%);
+}
+
+.result-panel {
+  margin-top: 1rem;
+  border: 1px solid var(--edge);
+  border-radius: 16px;
+  padding: 1rem;
+  background: #fffaf0;
+}
+
+.result-panel h3 {
+  margin: 0;
+}
+
+.result-panel p {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 760px) {
+  .app {
+    padding-top: 1rem;
+  }
+
+  .subject-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .quiz-shell,
+  .question-card,
+  .hero,
+  .result-panel {
+    border-radius: 14px;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+}

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MYP Grade 7 Revision Quizzes</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app" aria-live="polite">
+    <header class="hero">
+      <p class="kicker">MYP Grade 7 Revision</p>
+      <h1>Subject Quizzes</h1>
+      <p class="subtitle">
+        Practice Sciences, Mathematics, and Individuals and Societies with answer explanations after every question.
+      </p>
+    </header>
+
+    <section class="subject-panel" aria-label="Choose a subject">
+      <button class="subject-btn is-active" data-subject="sciences">Sciences</button>
+      <button class="subject-btn" data-subject="mathematics">Mathematics</button>
+      <button class="subject-btn" data-subject="individualsSocieties">Individuals and Societies</button>
+    </section>
+
+    <section class="quiz-shell" aria-label="Quiz">
+      <div class="quiz-meta">
+        <h2 id="subjectTitle">Sciences Quiz</h2>
+        <p id="progressText">Question 1 of 18</p>
+      </div>
+
+      <div class="question-card">
+        <p id="questionText" class="question-text"></p>
+        <div id="optionsList" class="options" role="list"></div>
+
+        <div id="feedbackBox" class="feedback" hidden>
+          <p id="feedbackStatus" class="feedback-status"></p>
+          <p id="feedbackAnswer" class="feedback-answer"></p>
+          <p id="feedbackExplanation" class="feedback-explanation"></p>
+        </div>
+      </div>
+
+      <div class="quiz-actions">
+        <button id="nextBtn" class="action-btn" disabled>Next Question</button>
+      </div>
+    </section>
+
+    <section id="resultPanel" class="result-panel" hidden>
+      <h3 id="resultTitle">Result</h3>
+      <p id="resultSummary"></p>
+      <button id="restartBtn" class="action-btn secondary">Retry This Subject</button>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
