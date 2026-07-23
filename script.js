@@ -421,3 +421,5 @@ restartBtn.addEventListener("click", () => {
 });
 
 renderQuestion();
+
+// Cache invalidation: 2026-07-23 18:37:47
