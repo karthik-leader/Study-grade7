@@ -2,78 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>MYP Grade 7 Revision Hub</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MYP Grade 7 Science quiz with topic-wise questions, answers, and mobile-friendly practice.">
+  <title>MYP Grade 7 Science Quiz</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="noise-overlay" aria-hidden="true"></div>
-  <main class="app-shell">
-    <header class="hero panel">
-      <p class="eyebrow">MYP Grade 7</p>
-      <h1>Revision Quiz Suite</h1>
-      <p class="hero-copy">Covering Sciences, Mathematics, and Individuals and Societies with syllabus-wide practice, instant feedback, and topic-level diagnostics.</p>
-    </header>
-
-    <section class="panel selectors" aria-label="Subject selection">
-      <div class="subject-buttons" role="tablist" aria-label="Choose subject">
-        <button type="button" class="subject-btn is-active" data-subject="science" role="tab" aria-selected="true">Sciences</button>
-        <button type="button" class="subject-btn" data-subject="mathematics" role="tab" aria-selected="false">Mathematics</button>
-        <button type="button" class="subject-btn" data-subject="individuals" role="tab" aria-selected="false">Individuals and Societies</button>
-      </div>
-
-      <div class="controls">
-        <label for="length-select">Quiz length</label>
-        <select id="length-select">
-          <option value="15">15 questions</option>
-          <option value="25" selected>25 questions</option>
-          <option value="all">Full syllabus set</option>
-        </select>
-
-        <button id="start-btn" class="btn btn-primary" type="button">Start Quiz</button>
-        <button id="restart-btn" class="btn btn-secondary" type="button" disabled>Restart</button>
+  <main class="app">
+    <section class="hero">
+      <p class="eyebrow">MYP Grade 7 Science</p>
+      <h1>Topic-Wise Quiz and Answer Guide</h1>
+      <p class="intro">
+        Practice the full syllabus by chapter. Each section includes multiple-choice questions,
+        instant answer review, and a score tracker that works well on phones and desktops.
+      </p>
+      <div class="hero-actions">
+        <a class="primary-link" href="#quiz-topics">Start the Quiz</a>
+        <button class="ghost-button" id="reveal-all-button" type="button">Reveal All Answers</button>
       </div>
     </section>
 
-    <section class="panel grid" aria-live="polite">
-      <article class="quiz-column">
-        <div class="quiz-meta">
-          <span id="subject-chip" class="chip">Sciences</span>
-          <span id="topic-chip" class="chip chip-soft">Topic: -</span>
-        </div>
-        <h2 id="question-text">Pick a subject and press Start Quiz.</h2>
-        <div id="options" class="options" aria-label="Answer choices"></div>
-        <p id="feedback" class="feedback">The quiz gives explanations after each answer.</p>
-        <button id="next-btn" class="btn btn-primary" type="button" hidden>Next Question</button>
-      </article>
-
-      <aside class="stats-column" aria-label="Quiz progress">
-        <div class="stat-box">
-          <span class="stat-label">Progress</span>
-          <strong id="progress">0 / 0</strong>
-        </div>
-        <div class="stat-box">
-          <span class="stat-label">Score</span>
-          <strong id="score">0</strong>
-        </div>
-        <div class="stat-box">
-          <span class="stat-label">Accuracy</span>
-          <strong id="accuracy">0%</strong>
-        </div>
-        <div class="stat-box">
-          <span class="stat-label">Topics Covered</span>
-          <strong id="topics-covered">0</strong>
-        </div>
-      </aside>
+    <section class="summary-panel" aria-label="Quiz summary">
+      <div class="summary-card">
+        <span class="summary-label">Topics</span>
+        <strong id="topic-count">0</strong>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Questions</span>
+        <strong id="question-count">0</strong>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Answered</span>
+        <strong id="answered-count">0</strong>
+      </div>
+      <div class="summary-card accent-card">
+        <span class="summary-label">Overall Score</span>
+        <strong id="overall-score">0 / 0</strong>
+      </div>
     </section>
 
-    <section class="panel summary" id="summary-panel" hidden>
-      <h3>Quiz Summary</h3>
-      <p id="summary-text"></p>
-      <ul id="weak-topics" class="weak-topics"></ul>
+    <nav class="topic-nav" id="quiz-topics" aria-label="Quiz topics"></nav>
+
+    <section class="topics-shell">
+      <div id="quiz-container" class="quiz-container" aria-live="polite"></div>
+    </section>
+
+    <section class="answer-guide">
+      <h2>How to Use This Quiz</h2>
+      <p>
+        Choose one answer for each question, then use the check button inside a topic to see the
+        correct answers and explanations. The Reveal All Answers button shows the full answer key
+        across the page.
+      </p>
+      <p>
+        This static site is ready for GitHub Pages, so students can open it from an external link
+        without installing anything.
+      </p>
     </section>
   </main>
 

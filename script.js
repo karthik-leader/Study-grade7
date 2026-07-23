@@ -1,692 +1,455 @@
-const subjectButtons = document.querySelectorAll(".subject-btn");
-const subjectChip = document.getElementById("subject-chip");
-const topicChip = document.getElementById("topic-chip");
-const lengthSelect = document.getElementById("length-select");
-const startBtn = document.getElementById("start-btn");
-const restartBtn = document.getElementById("restart-btn");
-const nextBtn = document.getElementById("next-btn");
-const questionText = document.getElementById("question-text");
-const optionsEl = document.getElementById("options");
-const feedback = document.getElementById("feedback");
-const progressEl = document.getElementById("progress");
-const scoreEl = document.getElementById("score");
-const accuracyEl = document.getElementById("accuracy");
-const topicsCoveredEl = document.getElementById("topics-covered");
-const summaryPanel = document.getElementById("summary-panel");
-const summaryText = document.getElementById("summary-text");
-const weakTopicsEl = document.getElementById("weak-topics");
+"use strict";
 
-const SUBJECT_LABELS = {
-  science: "Sciences",
-  mathematics: "Mathematics",
-  individuals: "Individuals and Societies"
-};
+const quizTopics = [
+	{
+		id: "scientific-inquiry",
+		title: "Scientific Inquiry and Lab Skills",
+		description: "Variables, measurement, lab safety, data tables, and drawing evidence-based conclusions.",
+		questions: [
+			{
+				prompt: "In an investigation on plant growth, which factor is the independent variable if students change the amount of sunlight?",
+				options: ["The plant height", "The amount of sunlight", "The type of soil", "The number of leaves"],
+				answer: 1,
+				explanation: "The independent variable is the one deliberately changed by the investigator, which is the amount of sunlight."
+			},
+			{
+				prompt: "Why should students wear safety goggles during many science experiments?",
+				options: ["To improve concentration", "To protect their eyes from spills and particles", "To measure temperature better", "To make results more accurate"],
+				answer: 1,
+				explanation: "Goggles are protective equipment that reduce risk from splashes, broken glass, and flying particles."
+			},
+			{
+				prompt: "Which tool is best for measuring the volume of a liquid accurately?",
+				options: ["Meter ruler", "Balance", "Graduated cylinder", "Thermometer"],
+				answer: 2,
+				explanation: "A graduated cylinder is designed to measure liquid volume using calibrated markings."
+			},
+			{
+				prompt: "What is the dependent variable in an experiment?",
+				options: ["The variable kept constant", "The result that is measured or observed", "The equipment list", "The prediction written before the test"],
+				answer: 1,
+				explanation: "The dependent variable is the outcome that changes in response to the independent variable."
+			},
+			{
+				prompt: "A fair test requires control variables mainly because they help scientists do what?",
+				options: ["Finish the experiment faster", "Compare results from different classrooms", "Make sure only one factor is changed", "Use fewer pieces of equipment"],
+				answer: 2,
+				explanation: "Control variables are kept the same so the effect of the independent variable can be tested clearly."
+			},
+			{
+				prompt: "Which statement is the best scientific conclusion?",
+				options: ["I liked this experiment", "The tallest plants received the most sunlight, so the data supports the hypothesis", "My partner wrote neat notes", "The experiment was difficult"],
+				answer: 1,
+				explanation: "A valid conclusion refers directly to the evidence and states whether the data supports the hypothesis."
+			}
+		]
+	},
+	{
+		id: "cells-life-processes",
+		title: "Cells and Life Processes",
+		description: "Cell structure, organization in living things, movement of materials, and major life functions.",
+		questions: [
+			{
+				prompt: "Which cell structure controls the activities of the cell?",
+				options: ["Cell membrane", "Nucleus", "Cytoplasm", "Vacuole"],
+				answer: 1,
+				explanation: "The nucleus contains genetic material and directs the cell's activities."
+			},
+			{
+				prompt: "What is the main function of the cell membrane?",
+				options: ["To make food using sunlight", "To support only plant cells", "To control what enters and leaves the cell", "To store the cell's DNA"],
+				answer: 2,
+				explanation: "The cell membrane acts as a selective barrier for materials entering and leaving the cell."
+			},
+			{
+				prompt: "Which organelle is found in plant cells and helps make food by photosynthesis?",
+				options: ["Mitochondrion", "Ribosome", "Chloroplast", "Nucleus"],
+				answer: 2,
+				explanation: "Chloroplasts contain chlorophyll and capture light energy for photosynthesis."
+			},
+			{
+				prompt: "Cells, tissues, organs, and organ systems are arranged in which order from simplest to most complex?",
+				options: ["Organs, tissues, cells, organ systems", "Cells, tissues, organs, organ systems", "Tissues, cells, organ systems, organs", "Cells, organs, tissues, organ systems"],
+				answer: 1,
+				explanation: "Cells form tissues, tissues form organs, and organs work together in organ systems."
+			},
+			{
+				prompt: "Diffusion is best described as the movement of particles from",
+				options: ["Low concentration to high concentration", "High concentration to low concentration", "One organ to another organ", "A solid to a liquid only"],
+				answer: 1,
+				explanation: "Diffusion is the net movement of particles from a region of higher concentration to lower concentration."
+			},
+			{
+				prompt: "Why do cells need mitochondria?",
+				options: ["To release energy from food", "To protect against bacteria", "To produce blood cells", "To absorb water from soil"],
+				answer: 0,
+				explanation: "Mitochondria are the site of respiration, releasing usable energy from food molecules."
+			}
+		]
+	},
+	{
+		id: "matter-particles",
+		title: "Matter, Particles, and Separation",
+		description: "States of matter, particle behavior, physical changes, mixtures, and separation methods.",
+		questions: [
+			{
+				prompt: "Which statement about particles in a gas is correct?",
+				options: ["They are packed tightly in fixed positions", "They move freely and spread out to fill the container", "They vibrate in one place only", "They cannot be compressed"],
+				answer: 1,
+				explanation: "Gas particles move randomly and spread apart, which is why gases fill their containers."
+			},
+			{
+				prompt: "Melting is the change of state from",
+				options: ["Gas to liquid", "Liquid to solid", "Solid to liquid", "Liquid to gas"],
+				answer: 2,
+				explanation: "Melting happens when a solid gains enough energy for its particles to move more freely as a liquid."
+			},
+			{
+				prompt: "Which process can separate an insoluble solid from a liquid?",
+				options: ["Condensation", "Filtration", "Evaporation only", "Freezing"],
+				answer: 1,
+				explanation: "Filtration traps the insoluble solid while the liquid passes through the filter."
+			},
+			{
+				prompt: "What happens to particles when a substance is heated?",
+				options: ["They lose all motion", "They move more slowly", "They usually gain kinetic energy and move faster", "They disappear"],
+				answer: 2,
+				explanation: "Heating increases particle kinetic energy, so particles usually move faster and farther apart."
+			},
+			{
+				prompt: "Salt dissolved in water is an example of",
+				options: ["An element", "A pure compound only", "A solution", "A suspension with visible particles"],
+				answer: 2,
+				explanation: "A solution is a mixture in which the solute dissolves evenly in the solvent."
+			},
+			{
+				prompt: "Which property can help identify a substance without changing it chemically?",
+				options: ["Flammability", "Boiling point", "Reactivity with acid", "Ability to rust"],
+				answer: 1,
+				explanation: "Boiling point is a physical property that can be measured without creating a new substance."
+			}
+		]
+	},
+	{
+		id: "forces-motion",
+		title: "Forces and Motion",
+		description: "Balanced and unbalanced forces, speed, friction, gravity, and interpreting motion.",
+		questions: [
+			{
+				prompt: "What happens when the forces acting on an object are balanced?",
+				options: ["The object must speed up", "The object changes direction immediately", "There is no overall change in motion caused by force", "The object disappears"],
+				answer: 2,
+				explanation: "Balanced forces mean the net force is zero, so motion does not change because of the forces."
+			},
+			{
+				prompt: "How is speed calculated?",
+				options: ["Distance multiplied by time", "Distance divided by time", "Mass divided by force", "Force multiplied by distance"],
+				answer: 1,
+				explanation: "Speed is calculated using the formula speed = distance / time."
+			},
+			{
+				prompt: "Which force pulls objects toward the center of Earth?",
+				options: ["Magnetism", "Friction", "Gravity", "Air resistance"],
+				answer: 2,
+				explanation: "Gravity is the attractive force between masses and pulls objects toward Earth."
+			},
+			{
+				prompt: "Why does friction often slow moving objects down?",
+				options: ["It acts in the same direction as motion", "It opposes motion between surfaces in contact", "It increases mass", "It removes gravity"],
+				answer: 1,
+				explanation: "Friction acts opposite to motion and resists the movement of surfaces across each other."
+			},
+			{
+				prompt: "If a car travels 120 km in 2 hours, what is its average speed?",
+				options: ["30 km/h", "40 km/h", "60 km/h", "240 km/h"],
+				answer: 2,
+				explanation: "Average speed = 120 km / 2 h = 60 km/h."
+			},
+			{
+				prompt: "An unbalanced force on a stationary object can cause it to",
+				options: ["Remain at rest forever", "Start moving", "Lose all mass", "Become invisible"],
+				answer: 1,
+				explanation: "A non-zero net force can change motion, so a stationary object can start moving."
+			}
+		]
+	},
+	{
+		id: "energy",
+		title: "Energy, Heat, Light, and Sound",
+		description: "Energy transfers, conduction, convection, radiation, and wave behavior in light and sound.",
+		questions: [
+			{
+				prompt: "Which is the best definition of energy?",
+				options: ["The amount of matter in an object", "The ability to do work or cause change", "The space an object takes up", "The force pulling toward Earth"],
+				answer: 1,
+				explanation: "Energy is the ability to do work or bring about change in a system."
+			},
+			{
+				prompt: "Heat transfer through direct contact is called",
+				options: ["Conduction", "Convection", "Radiation", "Reflection"],
+				answer: 0,
+				explanation: "Conduction transfers thermal energy by particle collisions during direct contact."
+			},
+			{
+				prompt: "Why are metal spoons likely to feel hot in a bowl of soup?",
+				options: ["Metals are poor conductors", "Metal transfers heat quickly by conduction", "The spoon creates heat", "Sound waves warm the spoon"],
+				answer: 1,
+				explanation: "Metals are good conductors, so thermal energy moves through them quickly."
+			},
+			{
+				prompt: "Which type of energy transfer can happen through empty space?",
+				options: ["Conduction only", "Convection only", "Radiation", "Friction"],
+				answer: 2,
+				explanation: "Radiation transfers energy by electromagnetic waves and does not need particles or a medium."
+			},
+			{
+				prompt: "What happens to the pitch of a sound when the frequency increases?",
+				options: ["The pitch becomes lower", "The pitch becomes higher", "The sound disappears", "The volume always decreases"],
+				answer: 1,
+				explanation: "Higher frequency sound waves are heard as higher pitch."
+			},
+			{
+				prompt: "A mirror changes the direction of light mainly by",
+				options: ["Absorption", "Refraction", "Reflection", "Convection"],
+				answer: 2,
+				explanation: "Mirrors reflect light, causing it to bounce off the surface."
+			}
+		]
+	},
+	{
+		id: "earth-space",
+		title: "Earth and Space Systems",
+		description: "Layers of Earth, rocks, weathering, the solar system, and patterns in day, night, and seasons.",
+		questions: [
+			{
+				prompt: "What causes day and night on Earth?",
+				options: ["Earth revolving around the Sun", "Earth rotating on its axis", "The Moon blocking sunlight", "Clouds moving across the sky"],
+				answer: 1,
+				explanation: "Day and night occur because Earth rotates, turning different regions toward and away from the Sun."
+			},
+			{
+				prompt: "Which layer of Earth is the thin outer solid part where we live?",
+				options: ["Inner core", "Outer core", "Mantle", "Crust"],
+				answer: 3,
+				explanation: "The crust is Earth's thin outermost solid layer."
+			},
+			{
+				prompt: "Weathering is the process that",
+				options: ["Forms new stars", "Breaks rocks into smaller pieces", "Creates ocean tides", "Stops erosion completely"],
+				answer: 1,
+				explanation: "Weathering breaks down rock physically or chemically into smaller pieces."
+			},
+			{
+				prompt: "Which object is a star?",
+				options: ["The Moon", "Mars", "The Sun", "Earth"],
+				answer: 2,
+				explanation: "The Sun is a star because it produces its own light and energy."
+			},
+			{
+				prompt: "The seasons mainly happen because",
+				options: ["Earth is closer to the Sun in summer", "The Moon changes shape", "Earth's axis is tilted as it revolves around the Sun", "Cloud cover changes each month"],
+				answer: 2,
+				explanation: "Earth's tilted axis changes the angle and duration of sunlight during its orbit, creating seasons."
+			},
+			{
+				prompt: "Igneous rocks form when",
+				options: ["Sediments are compacted", "Magma or lava cools and solidifies", "Heat and pressure change rock underground", "Rain dissolves minerals"],
+				answer: 1,
+				explanation: "Igneous rocks are produced when molten rock cools and becomes solid."
+			}
+		]
+	},
+	{
+		id: "ecosystems",
+		title: "Ecosystems and Environment",
+		description: "Food chains, habitats, adaptation, resource use, and human impact on the environment.",
+		questions: [
+			{
+				prompt: "In a food chain, which organism usually starts the chain?",
+				options: ["Producer", "Top predator", "Decomposer", "Scavenger"],
+				answer: 0,
+				explanation: "Producers, such as green plants, make their own food and form the base of most food chains."
+			},
+			{
+				prompt: "What is the role of decomposers in an ecosystem?",
+				options: ["They make sunlight", "They break down dead matter and recycle nutrients", "They only eat plants", "They increase friction in soil"],
+				answer: 1,
+				explanation: "Decomposers return nutrients to the environment by breaking down dead organisms and waste."
+			},
+			{
+				prompt: "A structural adaptation is best described as",
+				options: ["A learned behavior", "A body feature that helps survival", "A seasonal weather pattern", "A short-term experiment"],
+				answer: 1,
+				explanation: "Structural adaptations are physical traits that help an organism survive in its environment."
+			},
+			{
+				prompt: "Why is biodiversity important in an ecosystem?",
+				options: ["It usually makes ecosystems less stable", "It reduces the need for producers", "It can improve resilience and balance in the ecosystem", "It stops all competition"],
+				answer: 2,
+				explanation: "Greater biodiversity often supports ecosystem stability and helps systems recover from change."
+			},
+			{
+				prompt: "Which human action most directly helps conserve natural resources?",
+				options: ["Using more single-use plastics", "Leaving lights on all day", "Reducing, reusing, and recycling materials", "Cutting all forests for farmland"],
+				answer: 2,
+				explanation: "Reducing consumption and reusing or recycling materials helps conserve resources and lower waste."
+			},
+			{
+				prompt: "If the number of predators in a habitat drops sharply, what may happen first to the prey population?",
+				options: ["It may increase", "It must become extinct", "It will stop feeding", "It always stays the same"],
+				answer: 0,
+				explanation: "With fewer predators, more prey often survive, so the prey population may rise at first."
+			}
+		]
+	}
+];
 
-const QUIZZES = {
-  science: [
-    {
-      topic: "Scientific Inquiry",
-      question: "Why is repeating an experiment important?",
-      options: ["It makes the report longer", "It checks if the results are reliable", "It increases the temperature", "It removes all variables"],
-      answer: 1,
-      explanation: "Repeated trials help confirm whether results are consistent and reliable."
-    },
-    {
-      topic: "Scientific Inquiry",
-      question: "In an experiment testing fertilizer effect on plant growth, what is the dependent variable?",
-      options: ["Type of fertilizer", "Amount of sunlight", "Plant height growth", "Type of pot"],
-      answer: 2,
-      explanation: "The dependent variable is what you measure, here the growth of the plant."
-    },
-    {
-      topic: "Matter",
-      question: "Which statement best describes particles in a gas?",
-      options: ["They vibrate in fixed positions", "They are close together and flow", "They move freely and are far apart", "They are locked in a rigid pattern"],
-      answer: 2,
-      explanation: "Gas particles move quickly and are spread far apart."
-    },
-    {
-      topic: "Matter",
-      question: "Which process changes a liquid directly into a gas at the surface?",
-      options: ["Condensation", "Evaporation", "Freezing", "Sublimation"],
-      answer: 1,
-      explanation: "Evaporation is the surface process where liquid particles escape into the gas phase."
-    },
-    {
-      topic: "Chemistry Basics",
-      question: "What is the difference between an element and a compound?",
-      options: ["An element is made of one type of atom; a compound has atoms of different elements bonded", "A compound has one atom type only", "Elements can always be separated physically", "Compounds are always mixtures"],
-      answer: 0,
-      explanation: "Elements have one atom type, while compounds chemically combine two or more different atom types."
-    },
-    {
-      topic: "Chemistry Basics",
-      question: "Which method is best to separate sand from salt water?",
-      options: ["Magnetism", "Filtration then evaporation", "Sieving only", "Chromatography"],
-      answer: 1,
-      explanation: "Filter out sand first, then evaporate water to recover salt."
-    },
-    {
-      topic: "Forces and Motion",
-      question: "If balanced forces act on an object, what happens to its motion?",
-      options: ["It must speed up", "It must stop", "Its motion does not change", "It must move in a circle"],
-      answer: 2,
-      explanation: "Balanced forces mean net force is zero, so there is no change in velocity."
-    },
-    {
-      topic: "Forces and Motion",
-      question: "Which is an example of contact force?",
-      options: ["Gravity", "Magnetic attraction", "Friction", "Electrostatic force"],
-      answer: 2,
-      explanation: "Friction acts between surfaces touching each other."
-    },
-    {
-      topic: "Energy",
-      question: "Energy cannot be created or destroyed. This describes: ",
-      options: ["Law of acceleration", "Law of conservation of energy", "Law of mass action", "Theory of evolution"],
-      answer: 1,
-      explanation: "The conservation law states energy changes form but total energy remains constant."
-    },
-    {
-      topic: "Energy",
-      question: "In a flashlight, chemical energy in a battery mostly changes to:",
-      options: ["Nuclear energy only", "Light and thermal energy", "Potential energy only", "Sound energy only"],
-      answer: 1,
-      explanation: "The battery provides electrical energy that becomes light and some heat."
-    },
-    {
-      topic: "Biology Cells",
-      question: "Which organelle controls most cell activities?",
-      options: ["Cell membrane", "Nucleus", "Ribosome", "Vacuole"],
-      answer: 1,
-      explanation: "The nucleus contains genetic material and directs cell functions."
-    },
-    {
-      topic: "Biology Cells",
-      question: "Why do plant cells have chloroplasts?",
-      options: ["For digestion", "For photosynthesis", "For respiration only", "For storing DNA"],
-      answer: 1,
-      explanation: "Chloroplasts contain chlorophyll and carry out photosynthesis."
-    },
-    {
-      topic: "Human Body Systems",
-      question: "What is a major function of the circulatory system?",
-      options: ["Breaking down food mechanically", "Transporting oxygen and nutrients", "Producing hormones only", "Detecting light"],
-      answer: 1,
-      explanation: "Blood carries oxygen, nutrients, and wastes throughout the body."
-    },
-    {
-      topic: "Human Body Systems",
-      question: "Which system works most directly with the respiratory system to provide oxygen to cells?",
-      options: ["Digestive system", "Skeletal system", "Circulatory system", "Excretory system"],
-      answer: 2,
-      explanation: "The circulatory system transports oxygen from lungs to body cells."
-    },
-    {
-      topic: "Ecology",
-      question: "What role do decomposers play in an ecosystem?",
-      options: ["They produce sunlight", "They recycle nutrients from dead organisms", "They consume only plants", "They fix nitrogen in all ecosystems"],
-      answer: 1,
-      explanation: "Decomposers break down dead matter and return nutrients to the soil."
-    },
-    {
-      topic: "Ecology",
-      question: "In a food chain, which group usually has the least available energy?",
-      options: ["Producers", "Primary consumers", "Secondary consumers", "Top predators"],
-      answer: 3,
-      explanation: "Energy decreases at each trophic level, so top predators have the least available."
-    },
-    {
-      topic: "Earth Systems",
-      question: "What is the main cause of day and night on Earth?",
-      options: ["Earth revolving around the Sun", "The Moon orbiting Earth", "Earth rotating on its axis", "Seasons changing"],
-      answer: 2,
-      explanation: "Earth rotates once roughly every 24 hours, creating day and night."
-    },
-    {
-      topic: "Earth Systems",
-      question: "Which layer of Earth is mostly liquid iron and nickel?",
-      options: ["Crust", "Mantle", "Outer core", "Inner core"],
-      answer: 2,
-      explanation: "The outer core is a liquid metal layer beneath the mantle."
-    },
-    {
-      topic: "Simple Machines",
-      question: "A ramp is an example of which simple machine?",
-      options: ["Wheel and axle", "Lever", "Inclined plane", "Pulley"],
-      answer: 2,
-      explanation: "A ramp is an inclined plane, which reduces force needed over a longer distance."
-    },
-    {
-      topic: "Simple Machines",
-      question: "Mechanical advantage is best described as:",
-      options: ["Output force divided by input force", "Input force divided by output distance", "Total energy multiplied by time", "Power divided by speed"],
-      answer: 0,
-      explanation: "Mechanical advantage compares how much a machine multiplies force."
-    },
-    {
-      topic: "Environmental Science",
-      question: "Which action best supports sustainable resource use?",
-      options: ["Using more single-use plastics", "Overfishing to meet demand", "Reducing, reusing, and recycling materials", "Clearing forests rapidly"],
-      answer: 2,
-      explanation: "The 3Rs reduce waste and conserve natural resources."
-    }
-  ],
-  mathematics: [
-    {
-      topic: "Integers",
-      question: "What is -7 + 12?",
-      options: ["-19", "-5", "5", "19"],
-      answer: 2,
-      explanation: "Adding 12 to -7 gives 5."
-    },
-    {
-      topic: "Integers",
-      question: "What is -4 x -6?",
-      options: ["-24", "24", "-10", "10"],
-      answer: 1,
-      explanation: "A negative times a negative gives a positive result."
-    },
-    {
-      topic: "Fractions",
-      question: "Simplify 18/24.",
-      options: ["3/4", "2/3", "9/12", "6/8"],
-      answer: 0,
-      explanation: "Divide numerator and denominator by 6 to get 3/4."
-    },
-    {
-      topic: "Fractions",
-      question: "What is 2/5 + 1/10?",
-      options: ["3/15", "1/2", "2/10", "3/10"],
-      answer: 1,
-      explanation: "2/5 is 4/10, and 4/10 + 1/10 = 5/10 = 1/2."
-    },
-    {
-      topic: "Decimals",
-      question: "Calculate 3.75 + 2.4.",
-      options: ["6.15", "6.5", "5.95", "6.25"],
-      answer: 0,
-      explanation: "Align place values and add to get 6.15."
-    },
-    {
-      topic: "Decimals",
-      question: "What is 6.3 - 1.78?",
-      options: ["4.52", "5.48", "4.42", "5.52"],
-      answer: 0,
-      explanation: "6.30 - 1.78 = 4.52."
-    },
-    {
-      topic: "Ratio and Rate",
-      question: "A recipe uses 2 cups flour for 3 servings. How much flour is needed for 9 servings?",
-      options: ["4 cups", "5 cups", "6 cups", "9 cups"],
-      answer: 2,
-      explanation: "9 servings is 3 times as many, so flour is 2 x 3 = 6 cups."
-    },
-    {
-      topic: "Ratio and Rate",
-      question: "If a car travels 150 km in 3 hours, its average speed is:",
-      options: ["45 km/h", "50 km/h", "60 km/h", "75 km/h"],
-      answer: 1,
-      explanation: "Average speed = distance/time = 150/3 = 50 km/h."
-    },
-    {
-      topic: "Percent",
-      question: "What is 25% of 200?",
-      options: ["25", "40", "50", "75"],
-      answer: 2,
-      explanation: "25% is one quarter, and one quarter of 200 is 50."
-    },
-    {
-      topic: "Percent",
-      question: "A shirt costs 80 dollars and is discounted by 15%. What is the discount amount?",
-      options: ["10 dollars", "12 dollars", "15 dollars", "20 dollars"],
-      answer: 1,
-      explanation: "15% of 80 is 0.15 x 80 = 12 dollars."
-    },
-    {
-      topic: "Expressions",
-      question: "Which expression represents 5 less than 3x?",
-      options: ["5 - 3x", "3x - 5", "3(x - 5)", "5x - 3"],
-      answer: 1,
-      explanation: "Less than means subtract 5 from 3x."
-    },
-    {
-      topic: "Expressions",
-      question: "Simplify: 4a + 3a - 2.",
-      options: ["7a - 2", "12a - 2", "7a", "a - 2"],
-      answer: 0,
-      explanation: "Combine like terms: 4a + 3a = 7a."
-    },
-    {
-      topic: "Equations",
-      question: "Solve: x + 9 = 14.",
-      options: ["x = 3", "x = 4", "x = 5", "x = 23"],
-      answer: 2,
-      explanation: "Subtract 9 from both sides to get x = 5."
-    },
-    {
-      topic: "Equations",
-      question: "Solve: 3x = 21.",
-      options: ["x = 6", "x = 7", "x = 8", "x = 18"],
-      answer: 1,
-      explanation: "Divide both sides by 3 to get x = 7."
-    },
-    {
-      topic: "Geometry",
-      question: "What is the area of a rectangle with length 8 cm and width 5 cm?",
-      options: ["13 cm2", "26 cm2", "40 cm2", "80 cm2"],
-      answer: 2,
-      explanation: "Area = length x width = 8 x 5 = 40 cm2."
-    },
-    {
-      topic: "Geometry",
-      question: "The sum of angles in any triangle is:",
-      options: ["90 degrees", "180 degrees", "270 degrees", "360 degrees"],
-      answer: 1,
-      explanation: "Interior angles of a triangle always add to 180 degrees."
-    },
-    {
-      topic: "Volume",
-      question: "Find the volume of a cuboid 3 cm x 4 cm x 5 cm.",
-      options: ["12 cm3", "20 cm3", "60 cm3", "120 cm3"],
-      answer: 2,
-      explanation: "Volume = length x width x height = 3 x 4 x 5 = 60 cm3."
-    },
-    {
-      topic: "Statistics",
-      question: "Find the mean of 4, 6, 8, 10.",
-      options: ["6", "7", "8", "9"],
-      answer: 1,
-      explanation: "Mean = (4 + 6 + 8 + 10)/4 = 28/4 = 7."
-    },
-    {
-      topic: "Statistics",
-      question: "What is the median of 3, 9, 1, 7, 5?",
-      options: ["3", "5", "7", "9"],
-      answer: 1,
-      explanation: "Ordered list is 1, 3, 5, 7, 9, so median is 5."
-    },
-    {
-      topic: "Probability",
-      question: "A fair die is rolled. What is the probability of getting an even number?",
-      options: ["1/6", "1/3", "1/2", "2/3"],
-      answer: 2,
-      explanation: "Even outcomes are 2, 4, 6 so probability is 3/6 = 1/2."
-    },
-    {
-      topic: "Probability",
-      question: "A bag has 3 red and 2 blue marbles. Probability of selecting a blue marble?",
-      options: ["2/5", "3/5", "1/2", "2/3"],
-      answer: 0,
-      explanation: "Blue outcomes are 2 out of 5 total marbles."
-    }
-  ],
-  individuals: [
-    {
-      topic: "Historical Thinking",
-      question: "What is a primary source?",
-      options: ["A modern textbook summary", "An original document or artifact from the time period", "A website article written later", "A history documentary"],
-      answer: 1,
-      explanation: "Primary sources come directly from the period being studied."
-    },
-    {
-      topic: "Historical Thinking",
-      question: "Why do historians compare multiple sources about one event?",
-      options: ["To avoid writing conclusions", "To identify bias and build a fuller understanding", "To reduce evidence", "To remove interpretation"],
-      answer: 1,
-      explanation: "Different perspectives help historians evaluate reliability and bias."
-    },
-    {
-      topic: "Geography Skills",
-      question: "Lines of latitude measure distance:",
-      options: ["East-west from the Prime Meridian", "North-south from the Equator", "From sea level", "Across mountain ranges"],
-      answer: 1,
-      explanation: "Latitude shows how far north or south a place is from the Equator."
-    },
-    {
-      topic: "Geography Skills",
-      question: "A map scale of 1:100,000 means:",
-      options: ["1 cm on map equals 1 km in reality", "1 cm on map equals 100,000 cm in reality", "100,000 cm on map equals 1 cm in reality", "The map has 100,000 symbols"],
-      answer: 1,
-      explanation: "Scale ratio compares map distance to actual distance."
-    },
-    {
-      topic: "Physical Geography",
-      question: "Which process breaks rocks into smaller pieces without moving them far away?",
-      options: ["Erosion", "Deposition", "Weathering", "Condensation"],
-      answer: 2,
-      explanation: "Weathering breaks material down, while erosion transports it."
-    },
-    {
-      topic: "Physical Geography",
-      question: "Which biome typically has low rainfall and sparse vegetation?",
-      options: ["Tropical rainforest", "Taiga", "Desert", "Temperate grassland"],
-      answer: 2,
-      explanation: "Deserts are defined by very low precipitation."
-    },
-    {
-      topic: "Human Geography",
-      question: "Urbanization means:",
-      options: ["People moving from cities to farms", "Growth of cities and urban populations", "Decline of transport systems", "Equal distribution of all populations"],
-      answer: 1,
-      explanation: "Urbanization is the increasing concentration of people in towns and cities."
-    },
-    {
-      topic: "Human Geography",
-      question: "A push factor in migration is best described as:",
-      options: ["A reason attracting people to a new place", "A pressure forcing people to leave their home area", "A border law", "A weather map"],
-      answer: 1,
-      explanation: "Push factors drive people away from where they currently live."
-    },
-    {
-      topic: "Economics",
-      question: "Scarcity in economics means:",
-      options: ["Everything is free", "Resources are limited but wants are unlimited", "Only money matters", "No one has choices"],
-      answer: 1,
-      explanation: "Scarcity creates the need to make choices about resource use."
-    },
-    {
-      topic: "Economics",
-      question: "Which is an example of opportunity cost?",
-      options: ["The tax on a product", "The next best alternative you give up when choosing", "The total amount produced", "The sale price"],
-      answer: 1,
-      explanation: "Opportunity cost is the value of the forgone alternative."
-    },
-    {
-      topic: "Economics",
-      question: "In a simple market model, when demand rises but supply stays the same, price tends to:",
-      options: ["Fall", "Stay exactly fixed", "Rise", "Become zero"],
-      answer: 2,
-      explanation: "Higher demand with unchanged supply usually pushes prices upward."
-    },
-    {
-      topic: "Civics",
-      question: "What is a key purpose of a constitution?",
-      options: ["To advertise political parties", "To set laws and principles for governing a state", "To replace all local laws daily", "To describe weather patterns"],
-      answer: 1,
-      explanation: "A constitution outlines core legal and political structures."
-    },
-    {
-      topic: "Civics",
-      question: "Why is separation of powers important?",
-      options: ["It combines all power in one office", "It prevents abuse by dividing authority among branches", "It removes courts", "It bans elections"],
-      answer: 1,
-      explanation: "Dividing power creates checks and balances in governance."
-    },
-    {
-      topic: "Globalization",
-      question: "Globalization is best described as:",
-      options: ["Countries becoming completely isolated", "Growing connections among countries in trade, culture, and technology", "Only local traditions spreading", "The end of migration"],
-      answer: 1,
-      explanation: "Globalization increases interactions across borders."
-    },
-    {
-      topic: "Globalization",
-      question: "One possible challenge of globalization is:",
-      options: ["Instant elimination of all inequality", "Loss of some local cultural practices", "No international communication", "No economic change"],
-      answer: 1,
-      explanation: "Global influences can weaken local traditions and identities in some places."
-    },
-    {
-      topic: "Sustainability",
-      question: "Sustainable development aims to:",
-      options: ["Use all resources quickly", "Meet present needs without harming future generations' ability to meet theirs", "Stop all economic activity", "Ignore environmental impact"],
-      answer: 1,
-      explanation: "Sustainability balances current needs with long-term environmental and social health."
-    },
-    {
-      topic: "Sustainability",
-      question: "Which policy best supports sustainable cities?",
-      options: ["Expanding car-only roads with no public transit", "Increasing green spaces and public transport", "Removing waste systems", "Ignoring air quality"],
-      answer: 1,
-      explanation: "Transit and green spaces improve environmental quality and livability."
-    },
-    {
-      topic: "Culture and Identity",
-      question: "Cultural diffusion refers to:",
-      options: ["Cultures never changing", "Spread of cultural beliefs and practices between groups", "One culture existing alone", "Only language loss"],
-      answer: 1,
-      explanation: "Cultural diffusion happens when ideas, foods, music, and customs spread."
-    },
-    {
-      topic: "Culture and Identity",
-      question: "What is ethnocentrism?",
-      options: ["Respecting all cultures equally", "Judging other cultures by the standards of your own culture", "Learning new languages", "Comparing economic systems only"],
-      answer: 1,
-      explanation: "Ethnocentrism can create bias by treating one culture as the norm."
-    },
-    {
-      topic: "Citizenship",
-      question: "Active citizenship most strongly includes:",
-      options: ["Avoiding community issues", "Participating in community and civic decisions", "Ignoring rights and responsibilities", "Only studying history"],
-      answer: 1,
-      explanation: "Active citizens engage in community life and democratic processes."
-    },
-    {
-      topic: "Citizenship",
-      question: "Which is an example of a civic responsibility?",
-      options: ["Spreading misinformation", "Obeying laws and respecting others' rights", "Damaging public spaces", "Avoiding all rules"],
-      answer: 1,
-      explanation: "Civic responsibility includes following laws and contributing positively to society."
-    }
-  ]
-};
+const quizContainer = document.getElementById("quiz-container");
+const topicNav = document.getElementById("quiz-topics");
+const revealAllButton = document.getElementById("reveal-all-button");
+const topicCount = document.getElementById("topic-count");
+const questionCount = document.getElementById("question-count");
+const answeredCount = document.getElementById("answered-count");
+const overallScore = document.getElementById("overall-score");
 
-const state = {
-  subject: "science",
-  questions: [],
-  index: 0,
-  score: 0,
-  answered: 0,
-  correct: 0,
-  quizActive: false,
-  seenTopics: new Set(),
-  topicStats: {}
-};
-
-function shuffle(items) {
-  const copy = [...items];
-  for (let i = copy.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
+function createChoiceName(topicId, questionIndex) {
+	return `${topicId}-question-${questionIndex}`;
 }
 
-function setSubject(subject) {
-  state.subject = subject;
-  subjectChip.textContent = SUBJECT_LABELS[subject];
-  feedback.className = "feedback";
-  feedback.textContent = "Press Start Quiz to begin a full revision run.";
-
-  subjectButtons.forEach((btn) => {
-    const isActive = btn.dataset.subject === subject;
-    btn.classList.toggle("is-active", isActive);
-    btn.setAttribute("aria-selected", String(isActive));
-  });
+function buildTopicNavigation() {
+	topicNav.innerHTML = quizTopics
+		.map(
+			(topic) => `
+				<a class="topic-button" href="#${topic.id}">${topic.title}</a>
+			`
+		)
+		.join("");
 }
 
-function getQuestionCount() {
-  const selected = lengthSelect.value;
-  const totalAvailable = QUIZZES[state.subject].length;
-  if (selected === "all") {
-    return totalAvailable;
-  }
-  return Math.min(Number(selected), totalAvailable);
+function buildQuiz() {
+	quizContainer.innerHTML = quizTopics
+		.map((topic, topicIndex) => {
+			const questionMarkup = topic.questions
+				.map((question, questionIndex) => {
+					const choiceName = createChoiceName(topic.id, questionIndex);
+					const optionsMarkup = question.options
+						.map(
+							(option, optionIndex) => `
+								<label class="choice">
+									<input type="radio" name="${choiceName}" value="${optionIndex}">
+									<span>${option}</span>
+								</label>
+							`
+						)
+						.join("");
+
+					return `
+						<fieldset class="question-card" data-question data-correct-answer="${question.answer}">
+							<legend>${questionIndex + 1}. ${question.prompt}</legend>
+							<div class="choices">${optionsMarkup}</div>
+							<div class="question-feedback">
+								<strong>Answer:</strong> ${question.options[question.answer]}<br>
+								<span>${question.explanation}</span>
+							</div>
+						</fieldset>
+					`;
+				})
+				.join("");
+
+			return `
+				<article class="topic-card" id="${topic.id}" data-topic-index="${topicIndex}">
+					<header class="topic-header">
+						<div class="topic-title-group">
+							<h2>${topic.title}</h2>
+							<p class="topic-description">${topic.description}</p>
+							<span class="topic-meta">${topic.questions.length} questions</span>
+						</div>
+						<div class="topic-score-wrap">
+							<span class="summary-label">Topic Score</span>
+							<strong class="topic-score" data-topic-score>0 / ${topic.questions.length}</strong>
+						</div>
+					</header>
+					<div class="question-list">${questionMarkup}</div>
+					<footer class="topic-footer">
+						<p class="topic-score" data-topic-status>Choose answers, then check this topic.</p>
+						<button class="check-button" type="button" data-check-topic="${topicIndex}">Check Answers</button>
+					</footer>
+				</article>
+			`;
+		})
+		.join("");
 }
 
-function buildQuestionSet() {
-  const count = getQuestionCount();
-  return shuffle(QUIZZES[state.subject]).slice(0, count);
+function getSelectedAnswer(questionCard) {
+	const selected = questionCard.querySelector("input:checked");
+	return selected ? Number(selected.value) : null;
 }
 
-function resetTopicStats() {
-  state.topicStats = {};
-  state.seenTopics = new Set();
+function updateSummary() {
+	const questionCards = Array.from(document.querySelectorAll("[data-question]"));
+	const answered = questionCards.filter((card) => getSelectedAnswer(card) !== null).length;
+	const correct = questionCards.filter((card) => card.classList.contains("correct")).length;
 
-  QUIZZES[state.subject].forEach((item) => {
-    if (!state.topicStats[item.topic]) {
-      state.topicStats[item.topic] = { correct: 0, total: 0 };
-    }
-  });
+	topicCount.textContent = String(quizTopics.length);
+	questionCount.textContent = String(questionCards.length);
+	answeredCount.textContent = String(answered);
+	overallScore.textContent = `${correct} / ${questionCards.length}`;
 }
 
-function updateStats() {
-  const total = state.questions.length;
-  const accuracy = state.answered === 0 ? 0 : Math.round((state.correct / state.answered) * 100);
+function revealTopic(topicIndex) {
+	const topicCard = document.querySelector(`[data-topic-index="${topicIndex}"]`);
+	const questionCards = Array.from(topicCard.querySelectorAll("[data-question]"));
+	let correctCount = 0;
 
-  progressEl.textContent = `${state.answered} / ${total}`;
-  scoreEl.textContent = String(state.score);
-  accuracyEl.textContent = `${accuracy}%`;
-  topicsCoveredEl.textContent = String(state.seenTopics.size);
+	questionCards.forEach((questionCard) => {
+		const selectedAnswer = getSelectedAnswer(questionCard);
+		const correctAnswer = Number(questionCard.dataset.correctAnswer);
+
+		questionCard.classList.add("revealed");
+		questionCard.classList.remove("correct", "incorrect");
+
+		if (selectedAnswer === correctAnswer) {
+			correctCount += 1;
+			questionCard.classList.add("correct");
+			return;
+		}
+
+		questionCard.classList.add("incorrect");
+	});
+
+	topicCard.querySelector("[data-topic-score]").textContent = `${correctCount} / ${questionCards.length}`;
+
+	const statusText = correctCount === questionCards.length
+		? "Perfect score for this topic."
+		: `Reviewed ${questionCards.length} questions. Correct answers: ${correctCount}.`;
+
+	topicCard.querySelector("[data-topic-status]").textContent = statusText;
+	updateSummary();
 }
 
-function renderOptions(question) {
-  optionsEl.innerHTML = "";
-
-  question.options.forEach((optionText, optionIndex) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "option-btn";
-    button.textContent = optionText;
-    button.addEventListener("click", () => submitAnswer(optionIndex));
-    optionsEl.appendChild(button);
-  });
+function revealAllTopics() {
+	quizTopics.forEach((_, topicIndex) => revealTopic(topicIndex));
 }
 
-function renderQuestion() {
-  if (!state.quizActive) {
-    return;
-  }
+function attachEvents() {
+	quizContainer.addEventListener("click", (event) => {
+		const button = event.target.closest("[data-check-topic]");
 
-  if (state.index >= state.questions.length) {
-    endQuiz();
-    return;
-  }
+		if (!button) {
+			return;
+		}
 
-  const current = state.questions[state.index];
-  questionText.textContent = current.question;
-  topicChip.textContent = `Topic: ${current.topic}`;
-  feedback.className = "feedback";
-  feedback.textContent = "Choose the best answer and review the explanation.";
-  nextBtn.hidden = true;
-  renderOptions(current);
+		revealTopic(Number(button.dataset.checkTopic));
+	});
+
+	quizContainer.addEventListener("change", () => {
+		updateSummary();
+	});
+
+	revealAllButton.addEventListener("click", revealAllTopics);
 }
 
-function submitAnswer(selectedIndex) {
-  if (!state.quizActive) {
-    return;
-  }
-
-  const current = state.questions[state.index];
-  const isCorrect = selectedIndex === current.answer;
-  const optionButtons = optionsEl.querySelectorAll(".option-btn");
-
-  optionButtons.forEach((button, index) => {
-    button.disabled = true;
-    if (index === current.answer) {
-      button.classList.add("correct");
-    }
-    if (!isCorrect && index === selectedIndex) {
-      button.classList.add("wrong");
-    }
-  });
-
-  state.answered += 1;
-  state.seenTopics.add(current.topic);
-  state.topicStats[current.topic].total += 1;
-
-  if (isCorrect) {
-    state.correct += 1;
-    state.score += 4;
-    feedback.className = "feedback correct";
-    feedback.textContent = `Correct. ${current.explanation}`;
-    state.topicStats[current.topic].correct += 1;
-  } else {
-    feedback.className = "feedback wrong";
-    feedback.textContent = `Not quite. ${current.explanation}`;
-  }
-
-  updateStats();
-  nextBtn.hidden = false;
-}
-
-function buildWeakTopicsList() {
-  const ranked = Object.entries(state.topicStats)
-    .filter(([, value]) => value.total > 0)
-    .map(([topic, value]) => ({
-      topic,
-      accuracy: Math.round((value.correct / value.total) * 100),
-      attempts: value.total
-    }))
-    .sort((a, b) => a.accuracy - b.accuracy)
-    .slice(0, 4);
-
-  weakTopicsEl.innerHTML = "";
-
-  if (ranked.length === 0) {
-    const li = document.createElement("li");
-    li.textContent = "No attempts yet.";
-    weakTopicsEl.appendChild(li);
-    return;
-  }
-
-  ranked.forEach((item) => {
-    const li = document.createElement("li");
-    li.textContent = `${item.topic}: ${item.accuracy}% accuracy across ${item.attempts} question(s)`;
-    weakTopicsEl.appendChild(li);
-  });
-}
-
-function startQuiz() {
-  state.questions = buildQuestionSet();
-  state.index = 0;
-  state.score = 0;
-  state.answered = 0;
-  state.correct = 0;
-  state.quizActive = true;
-
-  resetTopicStats();
-  summaryPanel.hidden = true;
-  restartBtn.disabled = false;
-
-  updateStats();
-  renderQuestion();
-}
-
-function endQuiz() {
-  state.quizActive = false;
-  optionsEl.innerHTML = "";
-  nextBtn.hidden = true;
-  topicChip.textContent = "Topic: complete";
-
-  const accuracy = state.answered === 0 ? 0 : Math.round((state.correct / state.answered) * 100);
-
-  questionText.textContent = "Quiz complete.";
-  feedback.className = "feedback";
-  feedback.textContent = "Review your summary, then restart or switch subject.";
-  summaryText.textContent = `${SUBJECT_LABELS[state.subject]}: ${state.correct}/${state.answered} correct, ${accuracy}% accuracy, score ${state.score}.`;
-  buildWeakTopicsList();
-  summaryPanel.hidden = false;
-}
-
-subjectButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    setSubject(button.dataset.subject);
-    if (!state.quizActive) {
-      topicChip.textContent = "Topic: -";
-      questionText.textContent = "Pick quiz length and press Start Quiz.";
-      optionsEl.innerHTML = "";
-    }
-  });
-});
-
-startBtn.addEventListener("click", startQuiz);
-restartBtn.addEventListener("click", startQuiz);
-nextBtn.addEventListener("click", () => {
-  state.index += 1;
-  renderQuestion();
-});
-
-setSubject("science");
-updateStats();
+buildTopicNavigation();
+buildQuiz();
+attachEvents();
+updateSummary();
